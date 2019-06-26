@@ -38,6 +38,14 @@ cleos push action metadatatptp update '["huoyantest12","火焰神本人","http:/
 cleos push action metadatatptp update '["huoyantest12","火焰神本人2","http://www.huoyan.jpg","这是火焰之家本人2","huoyantest12","\"web\":\"本人2\""]' -p huoyantest12
 ```
 
+##增加审查人
+
+```
+cleos push action metadatatptp addverifier '["chendatony44"]' -p metadatatptp
+cleos push action metadatatptp addverifier '["metadatatptp"]' -p metadatatptp
+
+```
+
 ##申请审查
 
 ```
@@ -49,8 +57,16 @@ cleos push action metadatatptp applyverify '["huoyantest12","请确认身份"]' 
 
 ```
 verify(name account_name)
-cleos push action metadatatptp verify '["huoyantest12"]' -p metadatatptp
+cleos push action metadatatptp verify '["huoyantest12","metadatatptp"]' -p metadatatptp
 ```
+
+##查询审查人
+
+```
+cleos get table metadatatptp metadatatptp verifiers
+
+```
+
 
 ##查询账号信息
 

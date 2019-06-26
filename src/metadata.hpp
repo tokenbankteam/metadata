@@ -26,16 +26,18 @@ namespace meta_data {
     class [[eosio::contract]] metadata : public eosio::contract {
     public:
         using eosio::contract::contract;
-        metadata(name s, name code, eosio::datastream<const char*> ds) : contract(s, code, ds),_account(s,s.value),_investigate(s,s.value) {}
+        metadata(name s, name code, eosio::datastream<const char*> ds) : contract(s, code, ds),_account(s,s.value),_investigate(s,s.value),_verifier(s,s.value) {}
 
         [[eosio::action]]
         void transfer(name from, name to, asset quantity, string memo);
         [[eosio::action]]
         void update(name account_name,string title,string avatar,string desc,name modifier,string url);
         [[eosio::action]]
-        void verify(name account_name);
+        void verify(name account_name,name verifier);
         [[eosio::action]]
         void applyverify(name account_name,string memo);
+        [[eosio::action]]
+        void addverifier(name verifier);
         [[eosio::action]]
         void reset(void);
 
@@ -68,8 +70,16 @@ namespace meta_data {
         typedef eosio::multi_index<"investigate"_n, investigate,
                 indexed_by<"time"_n,const_mem_fun<investigate,uint64_t,&investigate::get_propose_time>>> investigate_table;
 
+        struct [[eosio::table]] verifiers {
+            name verifier;
+            uint64_t primary_key() const { return verifier.value; }
+            EOSLIB_SERIALIZE(verifiers, (verifier))
+        };
+        typedef eosio::multi_index<"verifiers"_n, verifiers> verifier_table;
+
         account_table _account;
         investigate_table _investigate;
+        verifier_table _verifier;
 
     };
 }
@@ -90,6 +100,6 @@ namespace meta_data {
                 } \
             } \
 
-EOSIO_DISPATCH_EX(meta_data::metadata, (transfer)(update)(applyverify)(verify)(reset))
+EOSIO_DISPATCH_EX(meta_data::metadata, (transfer)(update)(applyverify)(verify)(addverifier)(reset))
 
 #endif //WORK_METADATA_HPP

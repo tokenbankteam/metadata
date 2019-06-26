@@ -96,8 +96,19 @@ void metadata::update(name account_name,string title,string avatar,string desc,n
     });
 }
 
-void metadata::verify(name account_name){
+void metadata::addverifier(name verifier){
     require_auth(_self);
+    auto verifier_ptr = _verifier.find(verifier.value);
+    eosio_assert(verifier_ptr == _verifier.end(),"the verifier has been added");
+    _verifier.emplace(_self,[&](auto&s){
+       s.verifier = verifier;
+    });
+}
+
+void metadata::verify(name account_name, name verifier){
+    require_auth(verifier);
+    auto verifier_ptr = _verifier.find(verifier.value);
+    eosio_assert(verifier_ptr != _verifier.end(),"the verifier has no right to verify the account");
     auto investigate_ptr = _investigate.find(account_name.value);
     eosio_assert(investigate_ptr != _investigate.end(),"the investigate application for the account does not exist");
 
