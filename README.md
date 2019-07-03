@@ -111,3 +111,23 @@ struct [[eosio::table]] investigate {
 cleos get table metadatatptp metadatatptp investigate
 
 ```
+
+
+## 用户账号信息表字段规范
+
+accounts
+
+``` javascript
+{
+ account_name: "chendatony44",
+ avatar: "https://tp-statics.tokenpocket.pro/website-token/1562040672940-tp-lab.png",
+ desc: "小明的账号1",
+ modifier: "chendatony44",
+ price: "0.1000 EOS",
+ status: 3,
+ title: "小明",
+ url: '{"website":"https://www.baidu.com","telegram":"tokenPocket_en","twitter":"TokenPocket_en","wechat":"TP-robot"}',
+ verified: 0
+}
+```
+
