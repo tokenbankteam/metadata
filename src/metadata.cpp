@@ -51,15 +51,39 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
         }else{
             backasset = account_ptr->price * 12/10;
         }
+        //将token返给上一个修改者
         action(
                 permission_level{_self, "active"_n},
                 "eosio.token"_n,
                 "transfer"_n,
-                make_tuple(_self, account_ptr->modifier, backasset, std::string("thank you for attending TP account auction"))
+                make_tuple(_self, account_ptr->modifier, backasset, std::string("thank you for attending metadata game "))
         ).send();
+
+        //将本次修改者多支付的token返回
+        asset change = quantity;
+        change.amount = 0;
+        if (account_ptr->account_name == from) {
+            if (quantity.amount > account_ptr->price.amount/2){
+                change.amount = quantity.amount - account_ptr->price.amount/2;
+            }
+        }else {
+            if (quantity.amount > account_ptr->price.amount * 15/10){
+                change.amount = quantity.amount - (account_ptr->price.amount * 15/10);
+            }
+        }
+
+        if (change.amount > 0) {
+            action(
+                    permission_level{_self, "active"_n},
+                    "eosio.token"_n,
+                    "transfer"_n,
+                    make_tuple(_self, from, change, std::string("here is your change"))
+            ).send();
+        }
+
         _account.modify(account_ptr,_self,[&](auto&s){
             s.account_name = account;
-            s.price = quantity;
+            s.price = quantity-change;
             s.modifier = from;
             s.status = 1;
         });
