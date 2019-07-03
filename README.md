@@ -131,3 +131,50 @@ accounts
 }
 ```
 
+
+## 更新个人信息
+
+``` javascript
+
+const CONTRACT_NAME = account.info;
+
+let url = {
+    website: 'https://www.baidu.com',
+    telegram: 'tokenPocket_en',
+    twitter: 'TokenPocket_TP',
+    wechat: 'TP-robot'
+}
+
+let actions = [{
+   "account": "eosio.token",
+   "name": "transfer",
+   "authorization": [{
+       "actor": 'youraccount', 
+       "permission": 'active'
+   }],
+   "data": {
+       "from": 'youraccount', // 当前账号
+       "memo": 'itokenpocket', // 需要编辑的账号
+       "quantity": '0.1000 EOS', // 初始价格为0.1，没增加一次
+       "to": CONTRACT_NAME  // 合约账号
+   }
+}, {
+   "account": CONTRACT_NAME,
+   "name": "update",
+   "authorization": [{
+       "actor": 'youraccount', 
+       "permission": 'active'
+   }],
+   "data": {
+       "account_name": 'itokenpocket', // 需要编辑的账号
+       "avatar": 'https://a.com/a.jpg', // 头像图片地址
+       "desc": '介绍信息', 
+       "modifier": 'youraccount',
+       "title": 'TokenPocket官方账号',  // 名字昵称
+       "url": JSON.stringify(url)
+   }
+}]
+
+```
+
+
