@@ -83,10 +83,12 @@ cleos get table metadatatptp metadatatptp verifiers
             asset price;
             uint64_t primary_key() const { return account_name.value; }
             uint64_t get_price()const {return price.amount; }
+            uint64_t get_modifier()const {return modifier.value; }
             EOSLIB_SERIALIZE(accounts, (account_name)(title)(avatar)(desc)(modifier)(status)(verified)(url)(price))
         };
         typedef eosio::multi_index<"accounts"_n, accounts,
-                        indexed_by<"price"_n,const_mem_fun<accounts,uint64_t,&accounts::get_price>>> account_table; //价格 索引
+                        indexed_by<"price"_n,const_mem_fun<accounts,uint64_t,&accounts::get_price>>, //价格 索引
+                        indexed_by<"modifier"_n,const_mem_fun<accounts,uint64_t,&accounts::get_modifier>>> account_table;  //修改者索引
 
 cleos get table metadatatptp metadatatptp accounts
 
