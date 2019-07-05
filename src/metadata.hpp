@@ -53,7 +53,7 @@ namespace meta_data {
             string url;
             asset price;
             uint64_t primary_key() const { return account_name.value; }
-            uint64_t get_price()const {return price.amount; }
+            uint64_t get_price()const {return 0 - price.amount; }
             uint64_t get_modifier()const {return modifier.value; }
             EOSLIB_SERIALIZE(accounts, (account_name)(title)(avatar)(desc)(modifier)(status)(verified)(url)(price))
         };

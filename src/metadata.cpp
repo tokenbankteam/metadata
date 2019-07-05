@@ -30,7 +30,7 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
     eosio_assert( res_itr != userres.end(), "the new account name has not been  created" );
     auto account_ptr = _account.find(account.value);
     if (account_ptr == _account.end()) {
-        eosio_assert(quantity.amount == INIT_PRICE_EOS_AMOUNT,"quantity amount is not correct");
+        eosio_assert(quantity.amount == INIT_PRICE_EOS_AMOUNT,"quantity amount is not correct ");
         _account.emplace(_self,[&](auto&s){
             s.account_name = account;
             s.price = quantity;
@@ -51,12 +51,14 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
         }else{
             backasset = account_ptr->price * 12/10;
         }
+
+        string memo = "The account info of " + account_ptr->account_name.to_string() + " has been updated. Thanks for your attention.";
         //将token返给上一个修改者
         action(
                 permission_level{_self, "active"_n},
                 "eosio.token"_n,
                 "transfer"_n,
-                make_tuple(_self, account_ptr->modifier, backasset, std::string("thank you for attending metadata game "))
+                make_tuple(_self, account_ptr->modifier, backasset, std::string(memo))
         ).send();
 
         //将本次修改者多支付的token返回
