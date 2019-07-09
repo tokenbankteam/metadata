@@ -1,4 +1,33 @@
 
+# tpaccount编译部署
+
+## 依赖环境
+
+1. eosio.cdt --- branch: release/1.5.x 或以上
+2. eosio.contract --- tag:  v1.5.2 或以上
+
+## 编译
+
+#### 1. 将metadata目录放入eosio.contracts内。
+#### 2. 编辑文件 eosio.contracts/CMakeLists.txt:
+
+```
+add_subdirectory(metadata)
+```
+#### 3. 运行eosio.contracts/build.sh完成编译
+ ```
+ ./build.sh
+ ```
+ 
+ ## 部署
+ 
+ ```
+ cd build
+ cleos set contract metadatatptp ./tpaccount -p metadatatptp
+ ```
+
+# metadata 测试
+
 ##测试环境
 
 jungle测试网 合约 metadatatptp
