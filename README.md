@@ -28,46 +28,50 @@ add_subdirectory(metadata)
 
 # metadata 测试
 
-##测试环境
+## 测试环境
 
 jungle测试网 合约 metadatatptp
 节点：https://jungle2.cryptolions.io
 
-##转账更新信息：
+## 功能测试
+
+### 1.转账更新信息：
 
 ```
 transfer(name from, name to, asset quantity, string memo)
 update(name account_name,string title,string avatar,string desc,name modifier,string url)
 ```
 
-###第一次更新信息：
+#### 第一次更新信息：
 
 ```
 cleos push action eosio.token transfer '["huoyantest11","metadatatptp","0.1000 EOS","huoyantest12"]' -p huoyantest11
 cleos push action metadatatptp update '["huoyantest12","火焰神","http://www.huoyan.jpg","这是火焰之家","huoyantest11","\"web\":\"123\""]' -p huoyantest11
 ```
 
-###第二次更新信息：
+#### 第二次更新信息：
 
 ```
 cleos push action eosio.token transfer '["huoyantest13","metadatatptp","0.1500 EOS","huoyantest12"]' -p huoyantest13
 cleos push action metadatatptp update '["huoyantest12","火焰神13","http://www.huoyan.jpg","这是火焰之家13","huoyantest13","\"web\":\"13\""]' -p huoyantest13
 ```
 
-###账号本人更新信息：
+#### 账号本人更新信息：
 
 ```
 cleos push action eosio.token transfer '["huoyantest12","metadatatptp","0.0750 EOS","huoyantest12"]' -p huoyantest12
 cleos push action metadatatptp update '["huoyantest12","火焰神本人","http://www.huoyan.jpg","这是火焰之家本人","huoyantest12","\"web\":\"本人\""]' -p huoyantest12
 ```
 
-###账号本人二次更新信息：
+#### 账号本人二次更新信息：
 
 ```
 cleos push action metadatatptp update '["huoyantest12","火焰神本人2","http://www.huoyan.jpg","这是火焰之家本人2","huoyantest12","\"web\":\"本人2\""]' -p huoyantest12
 ```
 
-##增加审查人
+### 2. 审查
+
+#### 增加审查人
 
 ```
 cleos push action metadatatptp addverifier '["chendatony44"]' -p metadatatptp
@@ -75,21 +79,25 @@ cleos push action metadatatptp addverifier '["metadatatptp"]' -p metadatatptp
 
 ```
 
-##申请审查
+
+#### 申请审查
 
 ```
 applyverify(name account_name,string memo)
 cleos push action metadatatptp applyverify '["huoyantest12","请确认身份"]' -p huoyantest12
 ```
 
-##审查
+#### 审查
 
 ```
 verify(name account_name)
 cleos push action metadatatptp verify '["huoyantest12","metadatatptp"]' -p metadatatptp
 ```
 
-##查询审查人
+
+### 3.查询
+
+#### 查询审查人
 
 ```
 cleos get table metadatatptp metadatatptp verifiers
@@ -97,7 +105,7 @@ cleos get table metadatatptp metadatatptp verifiers
 ```
 
 
-##查询账号信息
+#### 查询账号信息
 
 ```
  struct [[eosio::table]] accounts {
@@ -123,7 +131,7 @@ cleos get table metadatatptp metadatatptp accounts
 
 ```
 
-##查询审查申请
+#### 查询审查申请
 
 ```
 struct [[eosio::table]] investigate {
@@ -141,8 +149,9 @@ cleos get table metadatatptp metadatatptp investigate
 
 ```
 
+## eosjs调用
 
-## 用户账号信息表字段规范
+### 用户账号信息表字段规范
 
 accounts
 
@@ -161,7 +170,7 @@ accounts
 ```
 
 
-## 更新个人信息
+### 更新个人信息
 
 ``` javascript
 
