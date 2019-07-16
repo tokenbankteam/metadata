@@ -94,6 +94,16 @@ verify(name account_name)
 cleos push action metadatatptp verify '["huoyantest12","metadatatptp"]' -p metadatatptp
 ```
 
+#### 黑名单
+
+```
+增加黑名单
+addblack(name account_name,name verifier)
+cleos push action metadatatptp addblack '["huoyantest12""metadatatptp"]' -p metadatatptp
+去除黑名单
+delblack(name account_name,name verifier)
+cleos push action metadatatptp delblack '["huoyantest12""metadatatptp"]' -p metadatatptp
+```
 
 ### 3.查询
 
@@ -147,6 +157,18 @@ struct [[eosio::table]] investigate {
 
 cleos get table metadatatptp metadatatptp investigate
 
+```
+
+#### 查询黑名单
+
+```
+struct [[eosio::table]] black {
+            name black_account;
+            uint64_t primary_key() const { return black_account.value; }
+            EOSLIB_SERIALIZE(black, (black_account))
+        };
+
+cleos get table metadatatptp metadatatptp black
 ```
 
 ## eosjs调用
