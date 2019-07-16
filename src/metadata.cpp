@@ -17,7 +17,7 @@ typedef eosio::multi_index< "userres"_n, user_resources >      user_resources_ta
 
 
 void metadata::transfer(name from, name to, asset quantity, string memo) {
-
+    eosio_assert(now() >= START_TIME,"game has not started");
     require_auth(from);
     if (!(from != _self && to == _self)) {
         return;
@@ -49,7 +49,7 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
         if(account_ptr->account_name == from) {
             backasset = account_ptr->price/2;
         }else{
-            backasset = account_ptr->price * 12/10;
+            backasset = account_ptr->price * 14/10;
         }
 
         string memo = "The account info of " + account_ptr->account_name.to_string() + " has been updated. Thanks for your attention.";
@@ -164,6 +164,28 @@ void metadata:: applyverify(name account_name,string memo) {
         s.memo = memo;
         s.propose_time = now();
     });
+}
+
+void metadata:: addblack(name account_name,name verifier) {
+    require_auth(verifier);
+    auto verifier_ptr = _verifier.find(verifier.value);
+    eosio_assert(verifier_ptr != _verifier.end(),"the verifier has no right to add black list");
+
+    auto black_ptr = _black.find(account_name.value);
+    eosio_assert(black_ptr == _black.end(),"the account has been in black list");
+    _black.emplace(_self,[&](auto &s) {
+       s.black_account = account_name;
+    });
+}
+
+void metadata:: delblack(name account_name,name verifier) {
+    require_auth(verifier);
+    auto verifier_ptr = _verifier.find(verifier.value);
+    eosio_assert(verifier_ptr != _verifier.end(),"the verifier has no right to add black list");
+
+    auto black_ptr = _black.find(account_name.value);
+    eosio_assert(black_ptr != _black.end(),"the account is not in black list ");
+    _black.erase(black_ptr);
 }
 
 void metadata:: reset(void) {

@@ -14,6 +14,8 @@
 #define EOS_SYMBOL symbol(symbol_code("EOS"),4)
 #define INIT_PRICE_EOS_AMOUNT 1000
 
+#define START_TIME 1563280200
+
 namespace meta_data {
     using namespace eosio;
     using eosio::name;
@@ -26,7 +28,7 @@ namespace meta_data {
     class [[eosio::contract]] metadata : public eosio::contract {
     public:
         using eosio::contract::contract;
-        metadata(name s, name code, eosio::datastream<const char*> ds) : contract(s, code, ds),_account(s,s.value),_investigate(s,s.value),_verifier(s,s.value) {}
+        metadata(name s, name code, eosio::datastream<const char*> ds) : contract(s, code, ds),_account(s,s.value),_investigate(s,s.value),_verifier(s,s.value),_black(s,s.value) {}
 
         [[eosio::action]]
         void transfer(name from, name to, asset quantity, string memo);
@@ -40,6 +42,10 @@ namespace meta_data {
         void addverifier(name verifier);
         [[eosio::action]]
         void reset(void);
+        [[eosio::action]]
+        void addblack(name account_name,name verifier);
+        [[eosio::action]]
+        void delblack(name account_name,name verifier);
 
     private:
         struct [[eosio::table]] accounts {
@@ -79,9 +85,17 @@ namespace meta_data {
         };
         typedef eosio::multi_index<"verifiers"_n, verifiers> verifier_table;
 
+        struct [[eosio::table]] black {
+            name black_account;
+            uint64_t primary_key() const { return black_account.value; }
+            EOSLIB_SERIALIZE(black, (black_account))
+        };
+        typedef eosio::multi_index<"black"_n, black> black_table;
+
         account_table _account;
         investigate_table _investigate;
         verifier_table _verifier;
+        black_table _black;
 
     };
 }
@@ -102,6 +116,6 @@ namespace meta_data {
                 } \
             } \
 
-EOSIO_DISPATCH_EX(meta_data::metadata, (transfer)(update)(applyverify)(verify)(addverifier)(reset))
+EOSIO_DISPATCH_EX(meta_data::metadata, (transfer)(update)(applyverify)(verify)(addverifier)(reset)(addblack)(delblack))
 
 #endif //WORK_METADATA_HPP
