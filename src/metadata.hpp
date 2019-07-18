@@ -46,6 +46,8 @@ namespace meta_data {
         void addblack(name account_name,name verifier);
         [[eosio::action]]
         void delblack(name account_name,name verifier);
+        [[eosio::action]]
+        void setbymaster(name account_name,string title,string avatar,string desc,string url);
 
     private:
         struct [[eosio::table]] accounts {
@@ -116,6 +118,6 @@ namespace meta_data {
                 } \
             } \
 
-EOSIO_DISPATCH_EX(meta_data::metadata, (transfer)(update)(applyverify)(verify)(addverifier)(reset)(addblack)(delblack))
+EOSIO_DISPATCH_EX(meta_data::metadata, (transfer)(update)(applyverify)(verify)(addverifier)(reset)(addblack)(delblack)(setbymaster))
 
 #endif //WORK_METADATA_HPP

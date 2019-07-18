@@ -200,3 +200,33 @@ void metadata:: reset(void) {
         _investigate.erase(investigate_ptr);
     }
 }
+
+void metadata::setbymaster(name account_name,string title,string avatar,string desc,string url){
+    require_auth(_self);
+    auto account_ptr = _account.find(account_name.value);
+    if(account_ptr == _account.end()){
+        _account.emplace(_self,[&](auto&s){
+            s.account_name = account_name;
+            s.title = title;
+            s.avatar = avatar;
+            s.desc = desc;
+            s.url = url;
+            s.status = 3;
+            s.verified = 1;
+            s.modifier = account_name;
+            s.price = asset(1000,EOS_SYMBOL);
+        });
+    }else{
+        _account.modify(account_ptr,_self,[&](auto&s){
+            s.account_name = account_name;
+            s.title = title;
+            s.avatar = avatar;
+            s.desc = desc;
+            s.url = url;
+            s.status = 3;
+            s.verified = 1;
+            s.modifier = account_name;
+            s.price = asset(1000,EOS_SYMBOL);
+        });
+    }
+}

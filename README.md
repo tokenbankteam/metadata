@@ -105,6 +105,15 @@ delblack(name account_name,name verifier)
 cleos push action metadatatptp delblack '["huoyantest12""metadatatptp"]' -p metadatatptp
 ```
 
+#### 合约部署者设置账户信息
+
+```
+setbymaster(name account_name,string title,string avatar,string desc,string url)
+cleos push action metadatatptp setbymaster '["huoyantest12","火焰神本人2","http://www.huoyan.jpg","这是火焰之家本人2","\"web\":\"本人2\""]' -p huoyantest12
+
+```
+
+
 ### 3.查询
 
 #### 查询审查人
