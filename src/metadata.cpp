@@ -17,7 +17,7 @@ typedef eosio::multi_index< "userres"_n, user_resources >      user_resources_ta
 
 
 void metadata::transfer(name from, name to, asset quantity, string memo) {
-    eosio_assert(now() >= START_TIME,"game has not started");
+    eosio_assert(now() >= START_TIME,"game has not started ");
     require_auth(from);
     if (!(from != _self && to == _self)) {
         return;
@@ -212,7 +212,7 @@ void metadata::setbymaster(name account_name,string title,string avatar,string d
             s.desc = desc;
             s.url = url;
             s.status = 3;
-            s.verified = 1;
+            s.verified = 0;
             s.modifier = account_name;
             s.price = asset(1000,EOS_SYMBOL);
         });
@@ -224,7 +224,7 @@ void metadata::setbymaster(name account_name,string title,string avatar,string d
             s.desc = desc;
             s.url = url;
             s.status = 3;
-            s.verified = 1;
+            s.verified = 0;
             s.modifier = account_name;
             s.price = asset(1000,EOS_SYMBOL);
         });

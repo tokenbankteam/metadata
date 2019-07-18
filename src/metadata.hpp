@@ -14,7 +14,7 @@
 #define EOS_SYMBOL symbol(symbol_code("EOS"),4)
 #define INIT_PRICE_EOS_AMOUNT 1000
 
-#define START_TIME 1563280200
+#define START_TIME 2563280200
 
 namespace meta_data {
     using namespace eosio;
