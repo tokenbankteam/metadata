@@ -30,7 +30,6 @@ namespace meta_data {
         using eosio::contract::contract;
         metadata(name s, name code, eosio::datastream<const char*> ds) : contract(s, code, ds),_account(s,s.value),_investigate(s,s.value),_verifier(s,s.value),_black(s,s.value) {}
 
-        [[eosio::action]]
         void transfer(name from, name to, asset quantity, string memo);
         [[eosio::action]]
         void update(name account_name,string title,string avatar,string desc,name modifier,string url);
