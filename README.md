@@ -25,6 +25,12 @@ add_subdirectory(metadata)
  cd build
  cleos set contract metadatatptp ./tpaccount -p metadatatptp
  ```
+ 
+ ## 权限设置
+ 设置eosio.code权限：为了让合约可以调用其他合约的action
+ ```
+ cleos set account permission metadatatptp active '{"threshold": 1,"keys": [{"key": "EOS66FPKnqfvZYbuMa38Tdb6XMo8PeVFqDwykvyYrj61Y8LbqKxjT ","weight": 1}],"accounts": [{"permission":{"actor":"metadatatptp","permission":"eosio.code"},"weight":1}]}' owner -p metadatatptp
+ ```
 
 # metadata 测试
 
