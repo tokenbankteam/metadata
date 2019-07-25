@@ -28,6 +28,7 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
 
     name account;
     name refer;
+    bool valid_refer = false;
     auto separator_pos_1 = memo.find('-');
     if(separator_pos_1 != string::npos){
         string account_str = memo.substr(0, separator_pos_1);
@@ -35,24 +36,26 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
         account = name(account_str);
         if(memo.size() > separator_pos_1+1){
             string refer_str = memo.substr(separator_pos_1+1);
-            eosio_assert(refer_str.size()<=12,"refer name string is too long");
-            refer = name(refer_str);
-
-            user_resources_table  userres( "eosio"_n, refer.value );
-            auto res_itr = userres.find( refer.value );
-            eosio_assert( res_itr != userres.end(), "the refer account doesn't exist" );
-
-            auto refer_ptr = _account.find(refer.value);
-            eosio_assert(refer_ptr!=_account.end(), "the refer account information should be updated");
-            eosio_assert(refer_ptr->modifier == refer, "the refer account should has updated itself's information");
+            if(refer_str.size()<=12){
+                refer = name(refer_str);
+                user_resources_table  userres( "eosio"_n, refer.value );
+                auto res_itr = userres.find( refer.value );
+                if(res_itr != userres.end()) {
+                    auto refer_ptr = _account.find(refer.value);
+                    if (refer_ptr!=_account.end()){
+                        if (refer_ptr->modifier == refer && refer != from) {//邀请人必须编辑过自己的账号；自己不能邀请自己
+                            valid_refer = true;
+                        }
+                    }
+                }
+            }
         }
-
     }else{
         account = name(memo);
     }
     user_resources_table  userres( "eosio"_n, account.value );
     auto res_itr = userres.find( account.value );
-    eosio_assert( res_itr != userres.end(), "the account doesn't exist");
+    eosio_assert( res_itr != userres.end() || account == "eosio.token"_n, "the account doesn't exist");
     auto account_ptr = _account.find(account.value);
     if (account_ptr == _account.end()) {
         eosio_assert(quantity.amount == INIT_PRICE_EOS_AMOUNT,"quantity amount is not correct ");
@@ -66,7 +69,7 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
                 s.status = 1;
             }
         });
-        if (refer.value > 0) {
+        if (valid_refer) {
             action(
                     permission_level{_self, "active"_n},
                     "eosio.token"_n,
@@ -116,7 +119,7 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
             ).send();
         }
 
-        if (refer.value > 0) {
+        if (valid_refer) {
             if (from != account){
                 action(
                         permission_level{_self, "active"_n},
