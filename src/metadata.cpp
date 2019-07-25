@@ -125,7 +125,7 @@ void metadata::transfer(name from, name to, asset quantity, string memo) {
                         permission_level{_self, "active"_n},
                         "eosio.token"_n,
                         "transfer"_n,
-                        make_tuple(_self, refer, account_ptr->price * 1/10, std::string("thank you for sharing the account.info"))
+                        make_tuple(_self, refer, account_ptr->price * 1/20, std::string("thank you for sharing the account.info"))
                 ).send();
             }
         }
