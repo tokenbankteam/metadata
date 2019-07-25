@@ -17,7 +17,7 @@ typedef eosio::multi_index< "userres"_n, user_resources >      user_resources_ta
 
 
 void metadata::transfer(name from, name to, asset quantity, string memo) {
-    //eosio_assert(now() >= START_TIME,"game has not started");
+    eosio_assert(now() >= START_TIME,"game has not started");
     require_auth(from);
     if (!(from != _self && to == _self)) {
         return;
